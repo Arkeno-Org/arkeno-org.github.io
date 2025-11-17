@@ -1,9 +1,11 @@
+//NOTE I AM STILL MAKING THIS
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arkeno.org</title>
+    <title>Open Innovation Tracker Dashboard (Functional)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
@@ -13,7 +15,7 @@
             color: #c9d1d9;
         }
         
-        /* --- Custom Color Definitions --- */
+        /* --- Custom Color Definitions (Teal, Blue, Orange) --- */
         .color-teal { color: #20c997; }
         .color-blue { color: #3B82F6; }
         .color-orange { color: #F59E0B; } 
@@ -28,169 +30,420 @@
             box-shadow: 0 6px 20px rgba(32, 201, 151, 0.6); 
             background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%); 
         }
-        .section-header {
-            border-left: 4px solid #3B82F6; 
-            padding-left: 1rem;
-        }
-        /* CSS to hide non-active content sections */
-        .page-content-section {
-            display: none;
-        }
-        /* Adjusted to display block/flex for the custom content pages */
-        .page-content-section.active {
-            display: flex; /* Using flex for simple column/row layout */
-            flex-direction: column;
-            gap: 2rem;
-        }
-        /* Custom block style for new pages */
-        .custom-content-block {
+        .app-card {
             background-color: #161b22;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 0.5rem;
             border: 1px solid #1f2a37;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            text-align: center;
+        }
+        .calendar-day {
+            padding: 0.75rem 0.4rem; 
+            border-radius: 0.25rem;
+            background-color: #0d1117;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .calendar-day.active {
+            background-color: #3B82F6;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5); 
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #c9d1d9;
+        }
+        .calendar-weekday {
+            font-weight: bold;
+            color: #94a3b8; 
         }
     </style>
-    
-    <script>
-        function showPage(pageId) {
-            // Hide all content sections within Section B
-            document.querySelectorAll('.page-content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-
-            // Show the selected section
-            const selectedSection = document.getElementById(pageId);
-            if (selectedSection) {
-                selectedSection.classList.add('active');
-            }
-        }
-
-        // Initialize: Show the first custom page when the document loads
-        document.addEventListener('DOMContentLoaded', () => {
-            showPage('custom-page-one'); 
-        });
-    </script>
 </head>
 <body class="min-h-screen antialiased">
 
-    <header class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
-        <div class="flex justify-between items-center">
-            <div class="text-2xl font-extrabold text-white tracking-wider">
-                <span class="color-blue">Arkeno</span><span class="color-teal">Organisation</span>
+    <header class="bg-[#161b22] border-b border-gray-800">
+        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div class="text-xl font-extrabold text-white tracking-wider">
+                <span class="color-blue">Open</span><span class="color-teal">Tracker</span>
             </div>
-            <nav>
-                <a href="#section-a" class="text-gray-400 hover:color-teal mx-3 transition-colors duration-200">Details</a>
-                <a href="#section-b" class="text-gray-400 hover:color-blue mx-3 transition-colors duration-200">Other Pages</a>
+            <nav class="space-x-4">
+                <a href="#" class="text-gray-400 hover:color-teal">Analytics</a>
+                <a href="#" class="text-gray-400 hover:color-blue">Reports</a>
+                <a href="#" class="text-gray-400 hover:color-orange">Settings</a>
             </nav>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div class="text-center">
-            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                <span class="color-orange">Arkeno Organisation</span>
-            </h1>
-            <p class="mt-4 text-xl text-gray-400 max-w-3xl mx-auto">
-                Arkeno Organisation is an organisation focused on chess, sports, coding and a lot more! Check out the google sites for details! The google sites contain all details.
-            </p>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h1 class="text-3xl font-bold text-white mb-8">
+            Innovation Tracking Dashboard
+        </h1>
 
-            <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="https://sites.google.com/view/Arkeno-org"
-                   class="primary-button text-white font-bold py-4 px-10 rounded-xl text-lg shadow-lg uppercase tracking-wider transition duration-300">
-                    Main Google Site
-                </a>
-                <a href="#section-b"
-                   class="bg-gray-700 text-gray-200 font-medium py-4 px-10 rounded-xl text-lg hover:bg-gray-600 transition duration-300 shadow-md border border-color-blue hover:border-color-teal">
-                    Other Pages
-                </a>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            
+            <div class="app-card transition transform hover:scale-[1.02] duration-300">
+                <h3 class="text-lg font-semibold color-teal mb-2">Total Hours Logged</h3>
+                <p id="totalHoursLogged" class="text-4xl font-extrabold text-white">0.00</p>
+                <p class="text-sm text-gray-400 mt-1">Total Contribution</p>
             </div>
-            <p class="mt-4 text-sm text-gray-500">
-                 This is Arkeno's github site <br> You can access this by arkeno-org.linkpc.net which is our domain! <br> <a href="arkeno-org.github.io/Arkeno-org">Click me to go to our other github site</a>
-            </p>
+            
+            <div class="app-card transition transform hover:scale-[1.02] duration-300">
+                <h3 class="text-lg font-semibold color-blue mb-2">Top Project Logged</h3>
+                <p id="topProjectName" class="text-2xl font-extrabold text-white truncate">None Logged Yet</p>
+                <p class="text-sm text-gray-400 mt-1">Time: <span id="topProjectHours">0.00h</span></p>
+            </div>
+            
+            <div class="app-card transition transform hover:scale-[1.02] duration-300">
+                <h3 class="text-lg font-semibold color-orange mb-2">Active Projects</h3>
+                <p id="activeProjectsCount" class="text-4xl font-extrabold text-white">0</p>
+                <p class="text-sm text-gray-400 mt-1">Currently Available</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="space-y-6">
+                
+                <div class="app-card border-l-4 border-teal-500">
+                    <h2 class="text-2xl font-bold color-teal mb-4">🕒 Live Time Tracker</h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-1">Task Description:</label>
+                        <input id="taskDescription" type="text" placeholder="e.g., Implementing new feature logic" class="bg-gray-700 text-white p-3 rounded text-base w-full border border-gray-600 focus:border-teal-400 focus:ring-teal-400" />
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-400 mb-1">Project / Tag:</label>
+                        <select id="projectSelect" class="bg-gray-700 text-white p-3 rounded text-base w-full border border-gray-600 focus:border-teal-400 focus:ring-teal-400">
+                            <option value="" selected>-- Select Innovation Project --</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-[#0d1117] p-4 rounded-md border border-gray-700">
+                        <p id="timerDisplay" class="text-5xl font-mono color-orange">00:00:00</p>
+                        <div class="flex space-x-3">
+                            <button id="stopButton" onclick="stopTimer()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg uppercase transition duration-200">
+                                STOP
+                            </button>
+                            <button id="startButton" onclick="startTimer()" class="primary-button text-white font-bold py-3 px-6 rounded-lg uppercase transition duration-200">
+                                START
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-card border-r-4 border-orange-500">
+                    <h2 class="text-2xl font-bold color-orange mb-4">🗃️ Manage Projects</h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-1">New Project Name:</label>
+                        <input id="newProjectName" type="text" placeholder="Enter Project Name" class="bg-gray-700 text-white p-2 rounded text-base w-full border border-gray-600" />
+                    </div>
+                    
+                    <button onclick="addProject()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 w-full">
+                        + Create Project
+                    </button>
+
+                    <div class="mt-4 border-t border-gray-700 pt-3">
+                         <p class="text-sm color-teal mb-2">Existing Projects:</p>
+                         <ul id="projectList" class="text-sm space-y-1">
+                             <li class="text-gray-500 italic mt-2">No active projects yet.</li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                
+                <div class="app-card border-t-4 border-blue-500">
+                    <div class="calendar-header">
+                        <button class="text-gray-500 hover:text-white">&lt; Prev</button>
+                        <span>November 2025</span>
+                        <button class="text-gray-500 hover:text-white">Next &gt;</button>
+                    </div>
+                    <div class="calendar-grid text-sm calendar-weekday mb-2">
+                        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                    </div>
+                    <div class="calendar-grid text-white">
+                        <span class="calendar-day text-gray-600">30</span><span class="calendar-day text-gray-600">31</span>
+                        <span class="calendar-day">1</span><span class="calendar-day">2</span><span class="calendar-day">3</span><span class="calendar-day">4</span><span class="calendar-day">5</span>
+                        <span class="calendar-day">6</span><span class="calendar-day">7</span><span class="calendar-day active">8</span><span class="calendar-day">9</span><span class="calendar-day">10</span><span class="calendar-day">11</span><span class="calendar-day">12</span>
+                        <span class="calendar-day">13</span><span class="calendar-day">14</span><span class="calendar-day">15</span><span class="calendar-day">16</span><span class="calendar-day">17</span><span class="calendar-day">18</span><span class="calendar-day">19</span>
+                        <span class="calendar-day">20</span><span class="calendar-day">21</span><span class="calendar-day">22</span><span class="calendar-day">23</span><span class="calendar-day">24</span><span class="calendar-day">25</span><span class="calendar-day">26</span>
+                        <span class="calendar-day">27</span><span class="calendar-day">28</span><span class="calendar-day">29</span><span class="calendar-day">30</span>
+                    </div>
+                    
+                    <hr class="border-gray-700 my-4" />
+
+                    <h3 class="text-xl font-bold color-teal mb-3">📅 Add/Remove Calendar Event</h3>
+                    <div class="flex space-x-3">
+                        <input type="text" placeholder="Event/Meeting Title" class="bg-gray-700 text-white p-2 rounded text-base flex-grow border border-gray-600" />
+                        <input type="time" class="bg-gray-700 text-white p-2 rounded text-base border border-gray-600" value="14:00"/>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                            + Add Event
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Click on a day above to select the date for the new event.</p>
+                </div>
+
+                <div class="app-card border-r-4 border-teal-500">
+                    <h2 class="text-xl font-bold color-teal mb-4">⏳ Logged Sessions</h2>
+                    <ul id="sessionLog" class="space-y-3">
+                        <li class="text-gray-500 italic">No sessions logged yet.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </main>
 
-    <section id="section-a" class="bg-[#161b22] py-16 sm:py-24 border-t border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="section-header text-3xl font-bold text-white mb-12">Details</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <div class="p-6 bg-[#0d1117] rounded-xl shadow-2xl border border-gray-800 transition transform hover:scale-[1.02] duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 color-teal">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                    </svg>
-                    <h3 class="text-xl font-semibold text-white mb-2">Arkeno Organisation</h3>
-                    <p class="text-gray-400">Arkeno Organisation is a dynamic, online-first, community driven organisation. <br> On our google sites we have alot of details.</p>
-                </div>
-                
-                <div class="p-6 bg-[#0d1117] rounded-xl shadow-2xl border border-gray-800 transition transform hover:scale-[1.02] duration-300">
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 color-blue"> 
-                       <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /> 
-                   </svg>
-                    <h3 class="text-xl font-semibold text-white mb-2">Information</h3>
-                    <p class="text-gray-400">Arkeno Organisation is a vibrant, online-first, community-driven organisation. At Arkeno, we explore diverse fields including chess, coding, sports, and more. We foster collaboration, learning, and creativity, and aim to provide a welcoming online space for everyone. We also offer AWPD Webpages and other cool features! Members can stay engaged by earning Arkeno Tokens which is a small reward-based token currency.</p>
-                </div>
-                
-                <div class="p-6 bg-[#0d1117] rounded-xl shadow-2xl border border-gray-800 transition transform hover:scale-[1.02] duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 color-orange mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.9m-1.2 5.1h.01M16 11.5a4 4 0 10-7.2-2.3m7.2 2.3h.01M12 12h.01" />
-                    </svg>
-                    <h3 class="text-xl font-semibold text-white mb-2">More</h3>
-                    <p class="text-gray-400">Check out our logo! <iframe src="https://drive.google.com/file/d/1ijhLSA0y5ehLLqWHGYjVxiLJYQVPowR6/preview" width="140" height="130"></iframe></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="section-b" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <h2 class="section-header text-3xl font-bold text-white mb-12">Other Pages</h2>
-        
-        <nav class="mb-8 text-center border-b border-gray-700 pb-2">
-            <a href="#" onclick="showPage('custom-page-one'); return false;" class="text-lg font-medium color-blue hover:color-teal mx-4 transition-colors duration-200">Our site!</a> 
-            <span class="text-gray-600">|</span>
-            <a href="#" onclick="showPage('custom-page-two'); return false;" class="text-lg font-medium color-blue hover:color-teal mx-4 transition-colors duration-200">Projects</a>
-            <span class="text-gray-600">|</span>
-            <a href="#" onclick="showPage('contact-info-page'); return false;" class="text-lg font-medium color-blue hover:color-teal mx-4 transition-colors duration-200">Contact Us</a>
-        </nav>
-        
-        <div id="custom-page-one" class="page-content-section active">
-            <div class="custom-content-block">
-                <h3 class="text-2xl font-bold color-teal mb-3">More</h3>
-                <p class="text-gray-400">Our site has many things like <a href="https://sites.google.com/view/arkeno-org/Arkenonetwork" style="color: cyan;">Arkeno Network</a> and more! Check them out by looking at the <a href="https://sites.google.com/view/arkeno-menu" style="color: cyan;">Full site menu</a></p>
-            </div>
-            </div>
-
-        <div id="custom-page-two" class="page-content-section">
-            <div class="custom-content-block">
-                <h3 class="text-2xl font-bold color-blue mb-3">Projects</h3>
-                <p class="text-gray-400">Some of Arkeno's projects are <a href="https://scratch.mit.edu/studios/33705947/" style="color: cyan;">our Scratch studio</a>, <a href="https://sites.google.com/view/XtraChess-org" style="color: cyan;">Xtrachess</a> and <a href="https://sites.google.com/view/arkeno-org/arkeno-org-main/ao_fl" style="color: cyan;">AO FL</a></p>
-                <div class="mt-4 p-4 bg-[#0d1117] rounded">
-                    <p class="text-sm color-teal">Click on one of the projects in cyan to be redirected!</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="contact-info-page" class="page-content-section">
-            <div class="bg-[#161b22] p-8 rounded-xl border border-gray-700 shadow-xl" id="contact">
-                <h3 class="text-2xl font-bold text-white mb-4">Contact <span class="color-orange">Info</span></h3>
-                <ul class="space-y-4 text-gray-400 list-disc list-inside">
-                    <li class="color-teal">Our Youtube <a href="https://www.youtube.com/@Arkeno_Organization">can be found when you click me!</a></li>
-                    <li class="color-blue">Our Lichess team <a href="https://lichess.org/team/ar4asd1s-team">can be found here!</a></li>
-                    <li class="color-orange">Other Information can be found on the site!</li>
-                </ul>
-                <div class="mt-6">
-                    <p class="text-lg font-medium text-white">Contact:</p>
-                    🌐 <a href="https://sites.google.com/view/Arkeno-org">Click me for Website</a> <br> ✉ Inquires at arkeno.auto.main@gmail.com
-                </div>
-            </div>
-        </div>
-        
-    </section>
-
-    <footer class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 border-t border-gray-800 mt-12 text-center text-gray-500">
-        <p> 2025 &copy; Arkeno Organization UA</p>
+    <footer class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-800 mt-12 text-center text-gray-500">
+        <p> 2025 &copy; Open Tracker Platform. All Rights Reserved. (Prototype)</p>
     </footer>
 
+    <script>
+        // --- Global Variables and Local Storage Setup ---
+        let timerInterval;
+        let startTime = 0;
+        let elapsedTime = 0;
+        let isRunning = false;
+        let projects = []; // Stores {id, name, totalTime}
+        let sessions = []; // Stores {id, projectId, task, duration, date}
+        
+        const TIMER_LS_KEY = 'trackerTimerData';
+        const PROJECTS_LS_KEY = 'trackerProjects';
+        const SESSIONS_LS_KEY = 'trackerSessions';
+
+        const $ = id => document.getElementById(id);
+
+        // --- Utility Functions ---
+
+        /** Loads data from localStorage on startup */
+        function loadData() {
+            projects = JSON.parse(localStorage.getItem(PROJECTS_LS_KEY) || '[]');
+            sessions = JSON.parse(localStorage.getItem(SESSIONS_LS_KEY) || '[]');
+            updateProjectDisplays();
+            updateMetrics();
+            updateSessionLog();
+        }
+
+        /** Saves all data to localStorage */
+        function saveData() {
+            localStorage.setItem(PROJECTS_LS_KEY, JSON.stringify(projects));
+            localStorage.setItem(SESSIONS_LS_KEY, JSON.stringify(sessions));
+        }
+
+        /** Formats seconds into HH:MM:SS */
+        function formatTime(totalSeconds) {
+            const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const s = String(Math.floor(totalSeconds % 60)).padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+        
+        // --- Timer Functions ---
+
+        function updateTimer() {
+            elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            $('timerDisplay').textContent = formatTime(elapsedTime);
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+
+            const selectedProject = $('projectSelect').value;
+            const task = $('taskDescription').value.trim();
+
+            if (!selectedProject || !task) {
+                alert("Please select a Project and enter a Task Description.");
+                return;
+            }
+
+            // Save the start time and the state
+            startTime = Date.now();
+            isRunning = true;
+            $('startButton').textContent = "Running...";
+            $('startButton').classList.add('bg-gray-500');
+            $('startButton').disabled = true;
+
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            if (!isRunning) return;
+
+            clearInterval(timerInterval);
+            isRunning = false;
+            
+            // Log the session
+            const selectedProject = $('projectSelect').value;
+            const task = $('taskDescription').value.trim() || 'No description';
+            const durationInSeconds = elapsedTime;
+            const durationInHours = durationInSeconds / 3600;
+
+            if (durationInSeconds > 5) { // Only log if duration is reasonable (e.g., > 5 seconds)
+                const newSession = {
+                    id: Date.now(),
+                    projectId: selectedProject,
+                    task: task,
+                    duration: durationInSeconds,
+                    date: new Date().toLocaleDateString(),
+                };
+                sessions.push(newSession);
+
+                // Update Project Total Time
+                const projectIndex = projects.findIndex(p => p.id === selectedProject);
+                if (projectIndex !== -1) {
+                    projects[projectIndex].totalTime += durationInHours;
+                }
+                
+                saveData();
+            }
+
+            // Reset timer display and state
+            elapsedTime = 0;
+            $('timerDisplay').textContent = "00:00:00";
+            $('startButton').textContent = "START";
+            $('startButton').classList.remove('bg-gray-500');
+            $('startButton').disabled = false;
+            $('taskDescription').value = ''; 
+            $('projectSelect').value = ''; 
+
+            updateMetrics();
+            updateSessionLog();
+        }
+
+        // --- Project Functions ---
+
+        function addProject() {
+            const name = $('newProjectName').value.trim();
+            if (!name) return;
+
+            const newProject = {
+                id: name.toLowerCase().replace(/\s/g, '_') + Date.now(), // Simple unique ID
+                name: name,
+                totalTime: 0.00,
+            };
+            projects.push(newProject);
+            $('newProjectName').value = '';
+            
+            saveData();
+            updateProjectDisplays();
+            updateMetrics();
+        }
+
+        function removeProject(id) {
+            // Find project index
+            const index = projects.findIndex(p => p.id === id);
+            if (index === -1) return;
+
+            // Remove project from array
+            projects.splice(index, 1);
+            
+            // Also clear sessions associated with this project (Optional but good practice)
+            sessions = sessions.filter(s => s.projectId !== id);
+
+            saveData();
+            updateProjectDisplays();
+            updateMetrics();
+            updateSessionLog();
+        }
+        
+        // --- Display Update Functions ---
+
+        /** Updates the Project Management list and the Time Tracker dropdown */
+        function updateProjectDisplays() {
+            const list = $('projectList');
+            const select = $('projectSelect');
+            
+            // Clear current lists
+            list.innerHTML = '';
+            select.innerHTML = '<option value="" selected>-- Select Innovation Project --</option>';
+
+            if (projects.length === 0) {
+                list.innerHTML = '<li class="text-gray-500 italic mt-2">No active projects yet.</li>';
+                $('activeProjectsCount').textContent = '0';
+                return;
+            }
+
+            // Repopulate lists
+            projects.forEach(project => {
+                // 1. Project Management List
+                const listItem = document.createElement('li');
+                listItem.className = 'flex justify-between items-center text-gray-400';
+                listItem.innerHTML = `
+                    <span>${project.name}</span>
+                    <button onclick="removeProject('${project.id}')" class="text-red-500 hover:text-red-400 text-xs">Remove</button>
+                `;
+                list.appendChild(listItem);
+                
+                // 2. Time Tracker Dropdown
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name;
+                select.appendChild(option);
+            });
+            
+            $('activeProjectsCount').textContent = projects.length;
+        }
+
+        /** Updates the top three metric cards */
+        function updateMetrics() {
+            // 1. Total Hours Logged
+            const totalHours = sessions.reduce((sum, session) => sum + (session.duration / 3600), 0);
+            $('totalHoursLogged').textContent = totalHours.toFixed(2);
+
+            // 2. Top Project Logged
+            // Sort projects by totalTime descending
+            const sortedProjects = [...projects].sort((a, b) => b.totalTime - a.totalTime);
+            
+            if (sortedProjects.length > 0 && sortedProjects[0].totalTime > 0) {
+                $('topProjectName').textContent = sortedProjects[0].name;
+                $('topProjectHours').textContent = sortedProjects[0].totalTime.toFixed(2) + 'h';
+            } else {
+                $('topProjectName').textContent = 'None Logged Yet';
+                $('topProjectHours').textContent = '0.00h';
+            }
+        }
+
+        /** Updates the list of logged sessions */
+        function updateSessionLog() {
+            const log = $('sessionLog');
+            log.innerHTML = '';
+
+            if (sessions.length === 0) {
+                log.innerHTML = '<li class="text-gray-500 italic">No sessions logged yet.</li>';
+                return;
+            }
+
+            sessions.slice(-5).reverse().forEach(session => { // Show last 5 sessions
+                const project = projects.find(p => p.id === session.projectId);
+                const projectName = project ? project.name : 'Unknown Project';
+
+                const listItem = document.createElement('li');
+                listItem.className = 'flex justify-between items-center text-gray-300 border-b border-gray-800 pb-2';
+                listItem.innerHTML = `
+                    <span>${session.task} (${projectName})</span>
+                    <span class="color-teal font-mono">${formatTime(session.duration)}</span>
+                `;
+                log.appendChild(listItem);
+            });
+        }
+        
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
 </body>
 </html>
 
